@@ -1,0 +1,32 @@
+[
+   {
+      "text": "Qual é o maior planeta do Sistema Solar?",
+      "choices": [
+         "Terra",
+         "Marte",
+         "Jupiter",
+         "Venus"
+      ],
+      "correct_answer": "Jupiter"
+   },
+   {
+      "text": "Qual o maior oceano da Terra?",
+      "choices": [
+         "Atlantico",
+         "Indico",
+         "Artico",
+         "Pacifico"
+      ],
+      "correct_answer": "Pacifico"
+   },
+   {
+      "text": "Qual cientista desenvolveu a Teoria da Relatividade?",
+      "choices": [
+         "Newton",
+         "Einstein",
+         "Galilei",
+         "Tesla"
+      ],
+      "correct_answer": "Einstein"
+   }
+]
