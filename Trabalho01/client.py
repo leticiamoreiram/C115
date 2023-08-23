@@ -1,20 +1,26 @@
 import socket
+from pymongo import MongoClient
 
 def main():
-    host = 'server'  # Nome do serviço do servidor no Docker Compose
+    host = 'localhost'
     port = 12345
 
     client_socket = socket.socket()
     client_socket.connect((host, port))
 
-    print("Connected to server. Let's start answering questions!\n")
+    print("Conectado ao servidor. Vamos responder algumas perguntas?\n")
 
-    for _ in range(3):
-        question = client_socket.recv(1024).decode()
-        choices = client_socket.recv(1024).decode()
+    client = MongoClient('mongodb://mongodb:27017')
+    db = client['knowledge_db']
+    questions_collection = db['questions']
+    questions = questions_collection.find()
 
-        print(question)
-        print(choices)
+    for question in questions:
+        question_text = question['text']
+        question_choices = ', '.join(question['choices'])
+
+        print(question_text)
+        print(question_choices)
 
         answer = input("Your answer: ")
         client_socket.send(answer.encode())
@@ -23,7 +29,6 @@ def main():
         print(response)
 
     client_socket.close()
-
 
 if __name__ == '__main__':
     main()

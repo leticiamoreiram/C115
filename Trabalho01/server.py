@@ -1,5 +1,6 @@
 import socket
-import json
+from pymongo import MongoClient
+
 
 def main():
     host = '0.0.0.0'
@@ -8,21 +9,25 @@ def main():
     server_socket = socket.socket()
     server_socket.bind((host, port))
     server_socket.listen(1)
-    print("Server listening on port:", port)
+    print("Servidor escutando na porta:", port)
 
     client_socket, addr = server_socket.accept()
-    print("Connection from:", addr)
+    print("Conexão de:", addr)
 
-    with open('questions.json', 'r') as file:
-        questions = json.load(file)
+    client = MongoClient('mongodb://mongodb:27017')
+    db = client['knowledge_db']
+    questions_collection = db['questions']
+    questions = questions_collection.find()
 
     for question in questions:
-        client_socket.send(question['text'].encode())
-        choices = ', '.join(question['choices'])
-        client_socket.send(choices.encode())
+        question_text = question['text']
+        question_choices = ', '.join(question['choices'])
+        correct_answer = question['correct_answer']
+
+        client_socket.send(question_text.encode())
+        client_socket.send(question_choices.encode())
 
         answer = client_socket.recv(1024).decode()
-        correct_answer = question['correct_answer']
         response = "Correct!" if answer == correct_answer else f"Wrong! The correct answer is {correct_answer}."
         client_socket.send(response.encode())
 
