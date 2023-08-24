@@ -1,32 +1,20 @@
 import socket
-from pymongo import MongoClient
 
 def main():
-    host = 'localhost'
-    port = 12345
+    HOST = '127.0.0.1'
+    PORT = 50000
 
-    client_socket = socket.socket()
-    client_socket.connect((host, port))
+    client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    client_socket.connect((HOST, PORT))
 
-    print("Conectado ao servidor. Vamos responder algumas perguntas?\n")
+    for _ in range(3):
+        question = client_socket.recv(4096).decode()
+        print(question)
+        user_answer = input("Insira a letra correspondente à resposta correta: ").lower()
+        client_socket.sendall(str.encode(user_answer))
 
-    client = MongoClient('mongodb://mongodb:27017')
-    db = client['knowledge_db']
-    questions_collection = db['questions']
-    questions = questions_collection.find()
-
-    for question in questions:
-        question_text = question['text']
-        question_choices = ', '.join(question['choices'])
-
-        print(question_text)
-        print(question_choices)
-
-        answer = input("Your answer: ")
-        client_socket.send(answer.encode())
-
-        response = client_socket.recv(1024).decode()
-        print(response)
+        feedback = client_socket.recv(1024).decode()
+        print(feedback)
 
     client_socket.close()
 
