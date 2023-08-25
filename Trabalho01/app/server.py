@@ -1,13 +1,16 @@
 import socket
 from pymongo import MongoClient
 
+RED_COLOR = "\033[91m"  # Código para vermelho
+GREEN_COLOR = "\033[92m"  # Código para verde
+RESET_COLOR = "\033[0m"   # Reseta a cor para a padrão
 
 def main():
-    client = MongoClient('mongodb://localhost:27017')
+    client = MongoClient('mongodb://mongodb:27017')  # Usando o nome do serviço
     db = client['knowledge_db']
     questions = db.questions
 
-    HOST = 'localhost'
+    HOST = '0.0.0.0'
     PORT = 50000
 
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -30,16 +33,15 @@ def main():
         correct_letter = chr(97 + question['choices'].index(question['correct_answer']))
 
         if user_answer == correct_letter:
-            feedback = "\nSua resposta está correta! :) \n"
+            feedback = GREEN_COLOR + "\nSua resposta está correta! :)" + RESET_COLOR + "\n"
         else:
-            feedback = f"\nVocê errou :( A resposta correta é a letra: {correct_letter}\n"
+            feedback = RED_COLOR + f"\nVocê errou :( A resposta correta é a letra: {correct_letter}" + RESET_COLOR + "\n"
 
         client_socket.sendall(str.encode(feedback))
 
     print("Perguntas enviadas. Fechando conexão...")
     client_socket.close()
     server_socket.close()
-
 
 if __name__ == '__main__':
     main()
