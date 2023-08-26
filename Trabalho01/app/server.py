@@ -6,11 +6,11 @@ GREEN_COLOR = "\033[92m"  # Código para verde
 RESET_COLOR = "\033[0m"   # Reseta a cor para a padrão
 
 def main():
-    client = MongoClient('mongodb://mongodb:27017')  # Usando o nome do serviço
+    client = MongoClient('mongodb://mongoadmin:secret@localhost:27017')
     db = client['knowledge_db']
     questions = db.questions
 
-    HOST = '0.0.0.0'
+    HOST = 'localhost'
     PORT = 50000
 
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -40,8 +40,9 @@ def main():
         client_socket.sendall(str.encode(feedback))
 
     print("Perguntas enviadas. Fechando conexão...")
-    client_socket.close()
-    server_socket.close()
+    # client_socket.close()
+    # server_socket.close()
 
 if __name__ == '__main__':
     main()
+

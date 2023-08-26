@@ -13,7 +13,7 @@ def main():
         user_answer = input("Insira a letra correspondente à resposta correta: ").lower()
         client_socket.sendall(str.encode(user_answer))
 
-        feedback = client_socket.recv(1024).decode()
+        feedback = client_socket.recv(4096).decode()
         print(feedback)
 
     client_socket.close()
