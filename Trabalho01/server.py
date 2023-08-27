@@ -40,8 +40,8 @@ def main():
         client_socket.sendall(str.encode(feedback))
 
     print("Perguntas enviadas. Fechando conexão...")
-    # client_socket.close()
-    # server_socket.close()
+    client_socket.close()
+    server_socket.close()
 
 if __name__ == '__main__':
     main()
